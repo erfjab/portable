@@ -1,3 +1,4 @@
+from ._bot import BOT, DP
 from ._env import (
     TELEGRAM_ADMIN_IDS,
     TELEGRAM_API_TOKEN,
@@ -8,10 +9,14 @@ from ._env import (
     UVICORN_SSL_CERTFILE,
     UVICORN_SSL_KEYFILE,
     SQLALCHEMY_DATABASE_URL,
+    SUBCRIPTION_DOMAIN_PREFIX,
 )
 
 
 __all__ = [
+    "BOT",
+    "DP",
+    "SUBCRIPTION_DOMAIN_PREFIX",
     "TELEGRAM_ADMIN_IDS",
     "TELEGRAM_API_TOKEN",
     "TELEGRAM_LOGGER_CHANNEL_ID",
