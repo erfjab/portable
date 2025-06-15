@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from eiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from eiogram.utils.inline_builder import InlineKeyboardBuilder
 from src.language import KeyText
@@ -8,48 +8,48 @@ from ._callback import AdminCB, ActionType, SectionType, UpdateType
 
 class AdminKB:
     @classmethod
-    def _add_back_cancel(
+    def _add(
         cls,
         kb: InlineKeyboardBuilder,
         *,
-        section: Optional[SectionType] = None,
+        home: bool = True,
+        create: Optional[SectionType] = None,
+        back: Optional[SectionType] = None,
+        target: Optional[Union[str, int]] = None,
     ):
         buttons = []
 
-        if section:
+        if create:
             buttons.append(
                 InlineKeyboardButton(
-                    text=KeyText.BACK,
-                    callback_data=AdminCB(section=section).pack(),
+                    text=KeyText.CREATE,
+                    callback_data=AdminCB(
+                        section=create, action=ActionType.CREATE
+                    ).pack(),
                 )
             )
 
-        buttons.append(
-            InlineKeyboardButton(
-                text=KeyText.HOME,
-                callback_data=AdminCB().pack(),
+        if back:
+            buttons.append(
+                InlineKeyboardButton(
+                    text=KeyText.BACK,
+                    callback_data=AdminCB(
+                        section=back,
+                        action=ActionType.INFO if target else ActionType.MENU,
+                        target=target,
+                    ).pack(),
+                )
             )
-        )
+
+        if home:
+            buttons.append(
+                InlineKeyboardButton(
+                    text=KeyText.HOME,
+                    callback_data=AdminCB().pack(),
+                )
+            )
 
         kb.row(*buttons, size=2)
-
-    @classmethod
-    def _add_create(
-        cls,
-        kb: InlineKeyboardBuilder,
-        *,
-        section: Optional[SectionType],
-    ):
-        buttons = []
-
-        buttons.append(
-            InlineKeyboardButton(
-                text=KeyText.CREATE,
-                callback_data=AdminCB(section=section, action=ActionType.CREATE).pack(),
-            )
-        )
-
-        kb.row(*buttons, size=1)
 
     @classmethod
     def home(cls) -> InlineKeyboardMarkup:
@@ -80,8 +80,7 @@ class AdminKB:
                 ).pack(),
             )
         kb.adjust(2)
-        cls._add_create(kb, section=SectionType.SERVER)
-        cls._add_back_cancel(kb)
+        cls._add(kb, back=SectionType.SERVER, create=SectionType.SERVER)
         return kb.as_markup()
 
     @classmethod
@@ -104,13 +103,13 @@ class AdminKB:
                 ).pack(),
             )
         kb.adjust(2, 2, 2)
-        cls._add_back_cancel(kb, section=SectionType.SERVER)
+        cls._add(kb, back=SectionType.SERVER)
         return kb.as_markup()
 
     @classmethod
     def servers_cancel(cls) -> InlineKeyboardMarkup:
         kb = InlineKeyboardBuilder()
-        cls._add_back_cancel(kb, section=SectionType.SERVER)
+        cls._add(kb, back=SectionType.SERVER)
         return kb.as_markup()
 
     @classmethod
@@ -126,7 +125,7 @@ class AdminKB:
                 ).pack(),
             )
         kb.adjust(1)
-        cls._add_back_cancel(kb, section=SectionType.SERVER)
+        cls._add(kb, back=SectionType.SERVER)
         return kb.as_markup()
 
     @classmethod
@@ -145,7 +144,7 @@ class AdminKB:
             ).pack(),
         )
         kb.adjust(2)
-        cls._add_back_cancel(kb, section=SectionType.SERVER)
+        cls._add(kb, back=SectionType.SERVER)
         return kb.as_markup()
 
     @classmethod
@@ -163,11 +162,11 @@ class AdminKB:
                 ).pack(),
             )
         kb.adjust(2)
-        cls._add_back_cancel(kb)
+        cls._add(kb)
         return kb.as_markup()
 
     @classmethod
     def subscriptions_cancel(cls) -> InlineKeyboardMarkup:
         kb = InlineKeyboardBuilder()
-        cls._add_back_cancel(kb, section=SectionType.SUBCRIPTION)
+        cls._add(kb, back=SectionType.SUBCRIPTION)
         return kb.as_markup()
