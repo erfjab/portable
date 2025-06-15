@@ -14,7 +14,7 @@ class ClinetManager:
                 token = await api.generate_access_token(
                     username=config["username"], password=config["password"]
                 )
-                token = token.access_token if token and token.is_sudo else None
+                token = token.access_token if token else None
             case _:
                 return
 
