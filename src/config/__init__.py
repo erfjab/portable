@@ -1,5 +1,7 @@
+from ._info import VERSION
 from ._bot import BOT, DP
 from ._env import (
+    DEBUG,
     TELEGRAM_ADMIN_IDS,
     TELEGRAM_API_TOKEN,
     TELEGRAM_LOGGER_CHANNEL_ID,
@@ -16,6 +18,8 @@ from ._env import (
 __all__ = [
     "BOT",
     "DP",
+    "VERSION",
+    "DEBUG",
     "SUBCRIPTION_DOMAIN_PREFIX",
     "TELEGRAM_ADMIN_IDS",
     "TELEGRAM_API_TOKEN",
