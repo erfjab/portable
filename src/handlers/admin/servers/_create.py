@@ -7,7 +7,7 @@ from src.keys.admin import AdminCB, AdminKB, SectionType, ActionType
 from src.db import Session, Server, User
 from src.language import MesText
 from src.utils import DuplicateError, PatternValidationError, ResourceNotFoundError
-from src.clients import ClinetManager
+from src.clients import ClientManager
 
 router = Router()
 
@@ -69,17 +69,14 @@ async def config_handler(message: Message, stats: StatsManager, db: Session):
     data = await stats.get_data()
 
     config = {"username": messages[0], "password": messages[1], "host": messages[2]}
-    token = await ClinetManager.generate_access_token(
+    token = await ClientManager.generate_access_token(
         config=config, server_type=data["target_type"]
     )
     if not token:
         raise ResourceNotFoundError()
 
     Server.create(
-        db,
-        remark=data["remark"],
-        type=data["target_type"],
-        config=config,
+        db, remark=data["remark"], type=data["target_type"], config=config, access=token
     )
 
     await stats.clear_stats()

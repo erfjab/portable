@@ -5,7 +5,7 @@ from eiogram.filters import StatsFilter, Text
 
 from src.keys.admin import AdminCB, AdminKB, SectionType, ActionType, UpdateType
 from src.db import Session, Server, User
-from src.clients import ClinetManager
+from src.clients import ClientManager
 from src.language import MesText
 from src.utils import ResourceNotFoundError, DuplicateError, PatternValidationError
 
@@ -119,16 +119,12 @@ async def input_handler(
                 "password": messages[1],
                 "host": messages[2],
             }
-            token = await ClinetManager.generate_access_token(
+            token = await ClientManager.generate_access_token(
                 config=config, server_type=server.type
             )
             if not token:
                 raise ResourceNotFoundError()
-            Server.update(
-                db,
-                server_id=server.id,
-                config=config,
-            )
+            Server.update(db, server_id=server.id, config=config, access=token)
 
     await stats.clear_all()
     update = await message.answer(
