@@ -5,16 +5,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.config import VERSION
-from .routers import setup_webhook_routers
+from .routers import setup_routers
 
 API = FastAPI(
-    title="MarzLine",
+    title="Portable",
     version=VERSION,
     docs_url="/docs",
     redoc_url="/redocs",
 )
 
-API.include_router(setup_webhook_routers())
+API.include_router(setup_routers())
 
 API.add_middleware(
     CORSMiddleware,

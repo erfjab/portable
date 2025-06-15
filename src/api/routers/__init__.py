@@ -1,11 +1,12 @@
 from fastapi import APIRouter
-from . import _telegram
+from . import _telegram, _subscription
 
 
-def setup_webhook_routers() -> APIRouter:
-    router = APIRouter(prefix="/api")
+def setup_routers() -> APIRouter:
+    router = APIRouter()
     router.include_router(_telegram.router)
+    router.include_router(_subscription.router)
     return router
 
 
-__all__ = ["setup_webhook_routers"]
+__all__ = ["setup_routers"]

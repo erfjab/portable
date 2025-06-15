@@ -34,8 +34,11 @@ class MarzneshinClient(ClientBase, RequestCore):
     def get_configs(self):
         pass
 
-    def get_user(self):
-        pass
+    async def get_user(self, username: str, access: str) -> Optional[dict]:
+        return await self.get(
+            endpoint=f"/api/users/{username}",
+            access_token=access,
+        )
 
     def get_users(self):
         pass

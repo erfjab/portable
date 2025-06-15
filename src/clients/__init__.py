@@ -1,4 +1,4 @@
-from ._manager import ClinetManager
+from ._manager import ClientManager
 
 
-__all__ = ["ClinetManager"]
+__all__ = ["ClientManager"]

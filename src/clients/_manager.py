@@ -3,7 +3,7 @@ from src.db import ServerType, Server
 from .marzneshin import MarzneshinClient, MarzneshinAdmin
 
 
-class ClinetManager:
+class ClientManager:
     @classmethod
     async def generate_access_token(
         self, *, config: dict[str, str], server_type: ServerType
@@ -22,12 +22,12 @@ class ClinetManager:
 
     @classmethod
     async def get_admin(
-        self, *, username: str, access: str, server: Server
+        self, *, username: str, server: Server
     ) -> Optional[MarzneshinAdmin]:
         match server.type:
             case ServerType.MARZNESHIN:
                 api = MarzneshinClient(server.config["host"])
-                admin = await api.get_admin(username=username, access=access)
+                admin = await api.get_admin(username=username, access=server.access)
             case _:
                 return
 
@@ -38,8 +38,15 @@ class ClinetManager:
         pass
 
     @classmethod
-    def get_user(self):
-        pass
+    async def get_user(self, username: str, server: Server) -> Optional[dict]:
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                user = await api.get_user(username=username, access=server.access)
+            case _:
+                return
+
+        return user
 
     @classmethod
     def get_users(self):

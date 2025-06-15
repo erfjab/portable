@@ -3,7 +3,7 @@ from eiogram.types import Update
 from src.config import TELEGRAM_WEBHOOK_SECRET_KEY, DP, BOT
 
 
-router = APIRouter(prefix="/webhook", tags=["Webhook"], include_in_schema=False)
+router = APIRouter(prefix="/api/webhook", tags=["Webhook"], include_in_schema=False)
 
 
 @router.post("")
