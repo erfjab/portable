@@ -28,3 +28,9 @@ class MesText(StrEnum):
     ERROR_UNAVAILABLE: str = "⚠️ Service is currently unavailable."
     ERROR_INTEGER: str = "⚠️ Your input must be a number."
     ERROR_NOT_FOUND: str = "⚠️ The requested item was not found."
+    SUBCRIPTIONS_MENU = "<b>👤 Subscriptions management menu</b>"
+    SUBSCRIPTIONS_INFO = (
+        "<b>Remark:</b> <code>{remark}</code>\n"
+        "<b>Key:</b> <code>{key}</code>\n"
+        "<b>Link:</b> <code>{link}</code>\n"
+    )

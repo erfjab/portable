@@ -2,7 +2,7 @@ from typing import Optional
 from eiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from eiogram.utils.inline_builder import InlineKeyboardBuilder
 from src.language import KeyText
-from src.db import Server, ServerType
+from src.db import Server, ServerType, Subscription
 from ._callback import AdminCB, ActionType, SectionType, UpdateType
 
 
@@ -58,6 +58,12 @@ class AdminKB:
             text=KeyText.SERVERS,
             callback_data=AdminCB(
                 section=SectionType.SERVER, action=ActionType.MENU
+            ).pack(),
+        )
+        kb.add(
+            text=KeyText.SUBCRIPTIONS,
+            callback_data=AdminCB(
+                section=SectionType.SUBCRIPTION, action=ActionType.MENU
             ).pack(),
         )
         kb.adjust(2)
@@ -140,4 +146,28 @@ class AdminKB:
         )
         kb.adjust(2)
         cls._add_back_cancel(kb, section=SectionType.SERVER)
+        return kb.as_markup()
+
+    @classmethod
+    def subscriptions_menu(
+        cls, subscriptions: list[Subscription]
+    ) -> InlineKeyboardMarkup:
+        kb = InlineKeyboardBuilder()
+        for subscription in subscriptions:
+            kb.add(
+                text=subscription.kb_remark,
+                callback_data=AdminCB(
+                    section=SectionType.SUBCRIPTION,
+                    action=ActionType.INFO,
+                    target=subscription.id,
+                ).pack(),
+            )
+        kb.adjust(2)
+        cls._add_back_cancel(kb)
+        return kb.as_markup()
+
+    @classmethod
+    def subscriptions_cancel(cls) -> InlineKeyboardMarkup:
+        kb = InlineKeyboardBuilder()
+        cls._add_back_cancel(kb, section=SectionType.SUBCRIPTION)
         return kb.as_markup()

@@ -7,6 +7,7 @@ class SectionType(StrEnum):
     HOME = "hm"
     SETTING = "st"
     SERVER = "sv"
+    SUBCRIPTION = "sp"
 
 
 class ActionType(StrEnum):

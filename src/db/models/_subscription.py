@@ -18,15 +18,26 @@ class Subscription(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=datetime.now())
 
     @property
+    def kb_remark(self) -> str:
+        return f"{self.remark} [{self.key}]"
+
+    @property
     def link(self) -> str:
         return f"{SUBCRIPTION_DOMAIN_PREFIX}/sub/{self.key}"
 
+    def format(self) -> dict:
+        return {"remark": self.remark, "key": self.key, "link": self.link}
+
     @classmethod
-    def get_by_key(cls, db: Session, *, key: int) -> Optional["Subscription"]:
+    def get_by_id(cls, db: Session, id: int) -> Optional["Subscription"]:
+        return db.query(cls).filter(cls.id == id).first()
+
+    @classmethod
+    def get_by_key(cls, db: Session, key: int) -> Optional["Subscription"]:
         return db.query(cls).filter(cls.key == key).first()
 
     @classmethod
-    def get_by_remark(cls, db: Session, *, remark: int) -> Optional["Subscription"]:
+    def get_by_remark(cls, db: Session, remark: int) -> Optional["Subscription"]:
         return db.query(cls).filter(cls.remark == remark).first()
 
     @classmethod

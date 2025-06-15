@@ -15,6 +15,7 @@ class KeyText(StrEnum):
     YES = "✅ Yes"
     NO = "❌ No"
     SERVERS = "🗃 Servers"
+    SUBCRIPTIONS = "👤 Subscriptions"
 
     @classmethod
     def update_key(cls, update: Any) -> StrEnum:
