@@ -73,8 +73,15 @@ class MarzneshinClient(ClientBase, RequestCore):
     def create_user(self):
         pass
 
-    def update_user(self):
-        pass
+    async def update_user(
+        self, *, username: str, data: dict, access: str
+    ) -> Optional[MarzneshinUserResponse]:
+        return await self.put(
+            endpoint=f"/api/users/{username}",
+            access=access,
+            data=data,
+            response_model=MarzneshinUserResponse,
+        )
 
     async def remove_user(self, *, username: str, access: str) -> bool:
         return await self.delete(

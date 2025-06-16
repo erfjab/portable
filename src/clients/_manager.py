@@ -80,8 +80,17 @@ class ClientManager:
         pass
 
     @classmethod
-    def update_user(self):
-        pass
+    async def update_user(self, *, data: dict, server: Server):
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                user = await api.update_user(
+                    username=data["username"], data=data, access=server.access
+                )
+            case _:
+                return
+
+        return user
 
     @classmethod
     async def remove_user(self, *, username: str, server: Server) -> Optional[bool]:
