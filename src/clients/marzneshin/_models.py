@@ -20,14 +20,6 @@ class MarzneshinAdmin(BaseModel):
         return self.is_sudo and self.enabled
 
 
-class UserDataUsageResetStrategy(str, Enum):
-    no_reset = "no_reset"
-    day = "day"
-    week = "week"
-    month = "month"
-    year = "year"
-
-
 class UserExpireStrategy(str, Enum):
     NEVER = "never"
     FIXED_DATE = "fixed_date"
