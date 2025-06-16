@@ -76,5 +76,8 @@ class MarzneshinClient(ClientBase, RequestCore):
     def update_user(self):
         pass
 
-    def remove_user(self):
-        pass
+    async def remove_user(self, *, username: str, access: str) -> bool:
+        return await self.delete(
+            endpoint=f"/api/users/{username}",
+            access=access,
+        )

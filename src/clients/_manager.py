@@ -84,5 +84,12 @@ class ClientManager:
         pass
 
     @classmethod
-    def remove_user(self):
-        pass
+    async def remove_user(self, *, username: str, server: Server) -> Optional[bool]:
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                action = await api.remove_user(username=username, access=server.access)
+            case _:
+                return
+
+        return action
