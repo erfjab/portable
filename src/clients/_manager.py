@@ -1,6 +1,6 @@
 from typing import Optional
 from src.db import ServerType, Server
-from .marzneshin import MarzneshinClient, MarzneshinAdmin
+from .marzneshin import MarzneshinClient, MarzneshinAdmin, MarzneshinUserResponse
 
 
 class ClientManager:
@@ -38,7 +38,9 @@ class ClientManager:
         pass
 
     @classmethod
-    async def get_user(self, username: str, server: Server) -> Optional[dict]:
+    async def get_user(
+        self, *, username: str, server: Server
+    ) -> Optional[MarzneshinUserResponse]:
         match server.type:
             case ServerType.MARZNESHIN:
                 api = MarzneshinClient(server.config["host"])
@@ -49,8 +51,15 @@ class ClientManager:
         return user
 
     @classmethod
-    def get_users(self):
-        pass
+    async def get_users(self, *, server: Server, page: int = 1, size: int = 50):
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                users = await api.get_users(access=server.access, page=page, size=size)
+            case _:
+                return
+
+        return users
 
     @classmethod
     def create_user(self):
