@@ -67,7 +67,7 @@ class Subscription(Base):
         return db.query(cls).filter(cls.username == username).first()
 
     @classmethod
-    def get_all(cls, db: Session) -> Optional["Subscription"]:
+    def get_all(cls, db: Session) -> Optional[list["Subscription"]]:
         query = db.query(cls)
         return query.all()
 
