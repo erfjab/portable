@@ -1,6 +1,11 @@
 from typing import Optional
 from ..core import ClientBase, RequestCore
-from ._models import MarzneshinAdmin, MarzneshinToken, MarzneshinUserResponse
+from ._models import (
+    MarzneshinAdmin,
+    MarzneshinToken,
+    MarzneshinUserResponse,
+    MarzneshinServiceResponce,
+)
 
 
 class MarzneshinClient(ClientBase, RequestCore):
@@ -33,8 +38,13 @@ class MarzneshinClient(ClientBase, RequestCore):
             response_model=MarzneshinAdmin,
         )
 
-    def get_configs(self):
-        pass
+    async def get_configs(
+        self, *, access: str
+    ) -> Optional[list[MarzneshinServiceResponce]]:
+        services = await self.get(endpoint="/api/services", access_token=access)
+        if not services:
+            return False
+        return [MarzneshinServiceResponce(**service) for service in services["items"]]
 
     async def get_user(
         self, *, username: str, access: str
@@ -58,7 +68,7 @@ class MarzneshinClient(ClientBase, RequestCore):
         )
         if not users:
             return
-        return [MarzneshinUserResponse(**user) for user in users]
+        return [MarzneshinUserResponse(**user) for user in users["items"]]
 
     def create_user(self):
         pass

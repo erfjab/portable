@@ -1,6 +1,11 @@
 from typing import Optional
 from src.db import ServerType, Server
-from .marzneshin import MarzneshinClient, MarzneshinAdmin, MarzneshinUserResponse
+from .marzneshin import (
+    MarzneshinClient,
+    MarzneshinAdmin,
+    MarzneshinUserResponse,
+    MarzneshinServiceResponce,
+)
 
 
 class ClientManager:
@@ -34,8 +39,17 @@ class ClientManager:
         return admin
 
     @classmethod
-    def get_configs(self):
-        pass
+    async def get_configs(
+        self, *, server: Server
+    ) -> Optional[list[MarzneshinServiceResponce]]:
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                configs = await api.get_configs(access=server.access)
+            case _:
+                return
+
+        return configs
 
     @classmethod
     async def get_user(
