@@ -34,7 +34,7 @@ class MarzneshinClient(ClientBase, RequestCore):
     ) -> Optional[MarzneshinAdmin]:
         return await self.get(
             endpoint=f"/api/admins/{username}",
-            access=access,
+            access_token=access,
             response_model=MarzneshinAdmin,
         )
 
@@ -75,7 +75,7 @@ class MarzneshinClient(ClientBase, RequestCore):
     ) -> Optional[MarzneshinUserResponse]:
         return await self.post(
             endpoint="/api/users",
-            access=access,
+            access_token=access,
             data=data,
             response_model=MarzneshinUserResponse,
         )
@@ -85,7 +85,7 @@ class MarzneshinClient(ClientBase, RequestCore):
     ) -> Optional[MarzneshinUserResponse]:
         return await self.put(
             endpoint=f"/api/users/{username}",
-            access=access,
+            access_token=access,
             data=data,
             response_model=MarzneshinUserResponse,
         )
@@ -93,5 +93,5 @@ class MarzneshinClient(ClientBase, RequestCore):
     async def remove_user(self, *, username: str, access: str) -> bool:
         return await self.delete(
             endpoint=f"/api/users/{username}",
-            access=access,
+            access_token=access,
         )

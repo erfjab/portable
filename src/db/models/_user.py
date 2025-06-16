@@ -7,7 +7,7 @@ from sqlalchemy.orm import mapped_column, Mapped, Session
 from eiogram.types import User as EioUser, Message, CallbackQuery
 
 from src.config import TELEGRAM_ADMIN_IDS, BOT
-from src.utils import hour_difference
+from src.utils.datetime import hour_difference
 from ..core import Base, GetDB
 
 

@@ -39,6 +39,17 @@ class MarzneshinUserResponse(BaseModel):
     activation_deadline: Optional[datetime]
     subscription_url: str
 
+    @property
+    def data_left(self) -> int:
+        if not self.data_limit:
+            return 0
+        if not self.used_traffic:
+            return self.data_limit
+        data_left = int(self.data_limit - self.used_traffic)
+        if data_left <= 0:
+            return 1024
+        return data_left
+
 
 class MarzneshinServiceResponce(BaseModel):
     id: int

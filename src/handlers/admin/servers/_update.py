@@ -7,7 +7,11 @@ from src.keys.admin import AdminCB, AdminKB, SectionType, ActionType, UpdateType
 from src.db import Session, Server, User
 from src.clients import ClientManager
 from src.language import MesText
-from src.utils import ResourceNotFoundError, DuplicateError, PatternValidationError
+from src.utils.exceptions import (
+    ResourceNotFoundError,
+    DuplicateError,
+    PatternValidationError,
+)
 
 
 router = Router()

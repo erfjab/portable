@@ -6,7 +6,11 @@ from eiogram.filters import StatsFilter, Text
 from src.keys.admin import AdminCB, AdminKB, SectionType, ActionType
 from src.db import Session, Server, User
 from src.language import MesText
-from src.utils import DuplicateError, PatternValidationError, ResourceNotFoundError
+from src.utils.exceptions import (
+    DuplicateError,
+    PatternValidationError,
+    ResourceNotFoundError,
+)
 from src.clients import ClientManager
 
 router = Router()

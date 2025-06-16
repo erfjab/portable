@@ -32,12 +32,12 @@ class MarzbanClient(ClientBase, RequestCore):
     async def get_admin(self, *, username: str, access: str) -> Optional[MarzbanAdmin]:
         return await self.get(
             endpoint=f"/api/admin/{username}",
-            access=access,
+            access_token=access,
             response_model=MarzbanAdmin,
         )
 
     async def get_configs(self, *, access: str) -> Optional[list[MarzbanProxyInbound]]:
-        inbounds: dict = await self.get(endpoint="/api/inbounds", access=access)
+        inbounds: dict = await self.get(endpoint="/api/inbounds", access_token=access)
         if not inbounds:
             return None
         return [
@@ -53,7 +53,7 @@ class MarzbanClient(ClientBase, RequestCore):
     ) -> Optional[MarzbanUserResponse]:
         return await self.get(
             endpoint=f"/api/user/{username}",
-            access=access,
+            access_token=access,
             response_model=MarzbanUserResponse,
         )
 
@@ -66,7 +66,7 @@ class MarzbanClient(ClientBase, RequestCore):
                 "offset": ((page - 1) * size),
                 "limit": page,
             },
-            access=access,
+            access_token=access,
         )
         if not users:
             return False
@@ -77,7 +77,7 @@ class MarzbanClient(ClientBase, RequestCore):
     ) -> Optional[MarzbanUserResponse]:
         return await self.post(
             endpoint="/api/user",
-            access=access,
+            access_token=access,
             data=data,
             response_model=MarzbanUserResponse,
         )
@@ -87,7 +87,7 @@ class MarzbanClient(ClientBase, RequestCore):
     ) -> Optional[MarzbanUserResponse]:
         return await self.put(
             endpoint=f"/api/user/{username}",
-            access=access,
+            access_token=access,
             data=data,
             response_model=MarzbanUserResponse,
         )
@@ -95,5 +95,5 @@ class MarzbanClient(ClientBase, RequestCore):
     async def remove_user(self, *, username: str, access: str) -> bool:
         return await self.delete(
             endpoint=f"/api/user/{username}",
-            access=access,
+            access_token=access,
         )

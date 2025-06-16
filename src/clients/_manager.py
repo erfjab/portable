@@ -108,14 +108,10 @@ class ClientManager:
         match server.type:
             case ServerType.MARZNESHIN:
                 api = MarzneshinClient(server.config["host"])
-                user = await api.create_user(
-                    username=data["username"], data=data, access=server.access
-                )
+                user = await api.create_user(data=data, access=server.access)
             case ServerType.MARZBAN:
                 api = MarzbanClient(server.config["host"])
-                user = await api.create_user(
-                    username=data["username"], data=data, access=server.access
-                )
+                user = await api.create_user(data=data, access=server.access)
             case _:
                 return
 

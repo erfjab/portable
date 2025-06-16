@@ -1,13 +1,15 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqlalchemy import String, Integer, DateTime, ForeignKey, BigInteger
 from sqlalchemy.orm import mapped_column, Mapped, Session, relationship
 
 from src.config import SUBCRIPTION_DOMAIN_PREFIX
-from ._server import Server
-from ._user import User
 from ..core import Base
+
+if TYPE_CHECKING:
+    from ._user import User
+    from ._server import Server
 
 
 class MarzneshinTag(Base):
@@ -140,7 +142,13 @@ class Subscription(Base):
 
     @classmethod
     def create(
-        cls, db: Session, *, key: str, username: str, server_id: int, owner: int
+        cls,
+        db: Session,
+        *,
+        key: str,
+        username: str,
+        server_id: int,
+        owner: Optional[int] = None,
     ) -> "Subscription":
         subscription = cls(key=key, username=username, server_id=server_id, owner=owner)
         db.add(subscription)

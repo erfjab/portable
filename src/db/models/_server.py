@@ -68,6 +68,7 @@ class Server(Base):
         *,
         is_available: Optional[bool] = None,
         enable: Optional[bool] = None,
+        type: Optional[ServerType] = None,
     ) -> List["Server"]:
         """Get servers with optional filters"""
         query = db.query(cls).order_by(cls.id)
@@ -76,6 +77,8 @@ class Server(Base):
             query = query.filter(cls.is_available == is_available)
         if enable is not None:
             query = query.filter(cls.enable == enable)
+        if type is not None:
+            query = query.filter(cls.type == type)
 
         return query.all()
 

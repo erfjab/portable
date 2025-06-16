@@ -33,6 +33,14 @@ class MarzbanUserResponse(BaseModel):
     subscription_url: Optional[str] = None
     admin: Optional[MarzbanAdmin] = None
 
+    @property
+    def data_left(self) -> int:
+        if not self.data_limit:
+            return 0
+        if not self.used_traffic:
+            return self.data_limit
+        return self.data_limit - self.used_traffic
+
 
 class MarzbanProxyTypes(str, Enum):
     VMess = "vmess"
