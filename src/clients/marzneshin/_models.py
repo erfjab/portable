@@ -45,6 +45,7 @@ class MarzneshinUserResponse(BaseModel):
     expire_date: Optional[datetime]
     usage_duration: Optional[int]
     activation_deadline: Optional[datetime]
+    subscription_url: str
 
 
 class MarzneshinServiceResponce(BaseModel):

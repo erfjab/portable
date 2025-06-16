@@ -2,17 +2,19 @@ import asyncio
 from fastapi import APIRouter, Request, HTTPException, Response
 from aiohttp import ClientSession, ClientError
 from src.clients import ClientManager
-from ..dependencies import SubDep
+from src.db import Subscription
+from ..dependencies import SubDep, MarzneshinSubDep
 
 router = APIRouter(prefix="/sub", tags=["Subscription"])
 
 
-@router.get("/{key}")
-async def subscription_info(request: Request, dbsub: SubDep):
-    """Forward subscription requests to the appropriate endpoint."""
-    user = await ClientManager.get_user(username=dbsub.key, server=dbsub.server)
-    if not user or not user.get("subscription_url"):
+async def forward_subscription_request(request: Request, subscription: Subscription):
+    user = await ClientManager.get_user(
+        username=subscription.key, server=subscription.server
+    )
+    if not user or not user.subscription_url:
         raise HTTPException(status_code=404)
+
     headers = dict(request.headers)
     headers.pop("host", None)
     params = dict(request.query_params)
@@ -21,7 +23,7 @@ async def subscription_info(request: Request, dbsub: SubDep):
         async with ClientSession() as session:
             async with session.request(
                 method=request.method,
-                url=user["subscription_url"],
+                url=user.subscription_url,
                 headers=headers,
                 params=params,
                 data=await request.body(),
@@ -34,10 +36,21 @@ async def subscription_info(request: Request, dbsub: SubDep):
                     headers=dict(response.headers),
                     media_type=response.headers.get("content-type", "text/plain"),
                 )
-
     except asyncio.TimeoutError:
         raise HTTPException(status_code=504)
     except ClientError:
         raise HTTPException(status_code=502)
     except Exception:
         raise HTTPException(status_code=500)
+
+
+@router.get("/{key}")
+async def subscription_info(request: Request, dbsub: SubDep):
+    """Forward subscription requests to the appropriate endpoint."""
+    return await forward_subscription_request(request, dbsub)
+
+
+@router.get("/{key}/{username}")
+async def subscription_marzneshin_info(request: Request, dbsub: MarzneshinSubDep):
+    """Forward subscription requests to the appropriate endpoint."""
+    return await forward_subscription_request(request, dbsub)

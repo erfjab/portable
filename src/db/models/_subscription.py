@@ -10,6 +10,45 @@ from ._user import User
 from ..core import Base
 
 
+class MarzneshinTag(Base):
+    __tablename__ = "marzneshin_tags"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    key: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    subscription_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("subscriptions.id", ondelete="CASCADE"), nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(), default=datetime.now())
+
+    subscription: Mapped["Subscription"] = relationship(
+        "Subscription", back_populates="marzneshin_tags", lazy="joined"
+    )
+
+    @classmethod
+    def get(cls, db: Session, *, key: str, username: str) -> Optional["MarzneshinTag"]:
+        return (
+            db.query(cls)
+            .filter(cls.username == username)
+            .filter(cls.key == key)
+            .first()
+        )
+
+    @classmethod
+    def create(
+        cls, db: Session, *, key: str, username: str, subscription_id: int
+    ) -> Optional["MarzneshinTag"]:
+        tag = cls(username=username, key=key, subscription_id=subscription_id)
+        db.add(tag)
+        db.flush()
+        return tag
+
+    @classmethod
+    def remove_by_subscription(cls, db: Session, *, subscription_id: int) -> bool:
+        db.query(cls).filter(cls.subscription_id == subscription_id).delete()
+        db.flush()
+        return True
+
+
 class Subscription(Base):
     __tablename__ = "subscriptions"
 
@@ -35,7 +74,13 @@ class Subscription(Base):
         "Server",
         backref=None,
         primaryjoin="Subscription.server_id == Server.id",
-        lazy="joined",
+        lazy="selectin",
+    )
+    marzneshin_tags: Mapped[list["MarzneshinTag"]] = relationship(
+        "MarzneshinTag",
+        back_populates="subscription",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
 
     @property
