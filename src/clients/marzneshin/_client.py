@@ -70,8 +70,15 @@ class MarzneshinClient(ClientBase, RequestCore):
             return
         return [MarzneshinUserResponse(**user) for user in users["items"]]
 
-    def create_user(self):
-        pass
+    async def create_user(
+        self, data: dict, access: str
+    ) -> Optional[MarzneshinUserResponse]:
+        return await self.post(
+            endpoint="/api/users",
+            access=access,
+            data=data,
+            response_model=MarzneshinUserResponse,
+        )
 
     async def update_user(
         self, *, username: str, data: dict, access: str

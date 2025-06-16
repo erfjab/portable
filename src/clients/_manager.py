@@ -76,8 +76,17 @@ class ClientManager:
         return users
 
     @classmethod
-    def create_user(self):
-        pass
+    async def create_user(self, *, data: dict, server: Server):
+        match server.type:
+            case ServerType.MARZNESHIN:
+                api = MarzneshinClient(server.config["host"])
+                user = await api.create_user(
+                    username=data["username"], data=data, access=server.access
+                )
+            case _:
+                return
+
+        return user
 
     @classmethod
     async def update_user(self, *, data: dict, server: Server):
