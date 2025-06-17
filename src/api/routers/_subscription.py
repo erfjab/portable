@@ -10,7 +10,7 @@ router = APIRouter(prefix="/sub", tags=["Subscription"])
 
 async def forward_subscription_request(request: Request, subscription: Subscription):
     user = await ClientManager.get_user(
-        username=subscription.key, server=subscription.server
+        username=subscription.username, server=subscription.server
     )
     if not user or not user.subscription_url:
         raise HTTPException(status_code=404)
@@ -50,7 +50,7 @@ async def subscription_info(request: Request, dbsub: SubDep):
     return await forward_subscription_request(request, dbsub)
 
 
-@router.get("/{key}/{username}")
+@router.get("/{username}/{key}")
 async def subscription_marzneshin_info(request: Request, dbsub: MarzneshinSubDep):
     """Forward subscription requests to the appropriate endpoint."""
     return await forward_subscription_request(request, dbsub)

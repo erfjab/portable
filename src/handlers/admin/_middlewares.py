@@ -2,7 +2,12 @@ from typing import Any, Callable, Dict, Awaitable
 from eiogram.middleware import BaseMiddleware
 from eiogram.types import Update
 from src.db import User, GetDB, Session
-from src.utils import PatternValidationError, DuplicateError, ResourceNotFoundError
+from src.utils.exceptions import (
+    PatternValidationError,
+    DuplicateError,
+    ResourceNotFoundError,
+    ServiceUnavailableError,
+)
 from src.language import MesText
 
 
@@ -42,4 +47,6 @@ class AdminMiddleware(BaseMiddleware):
                 await self._answer(db, update, MesText.ERROR_INTEGER)
             except ResourceNotFoundError:
                 await self._answer(db, update, MesText.ERROR_NOT_FOUND)
+            except ServiceUnavailableError:
+                await self._answer(db, update, MesText.ERROR_UNAVAILABLE)
             return None

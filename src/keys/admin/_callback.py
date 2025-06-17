@@ -16,6 +16,7 @@ class ActionType(StrEnum):
     SELECT = "sl"
     INFO = "nf"
     CREATE = "cr"
+    OPERATION = "op"
 
 
 class UpdateType(StrEnum):
@@ -24,6 +25,12 @@ class UpdateType(StrEnum):
     DISABLE = "ds"
     SERVER_CONFIG = "sc"
     REMOVE = "rm"
+
+
+class OperationType(StrEnum):
+    TRANSFER_SUB = "ts"
+    TRANSFER_SUB_FROM = "tf"
+    TRANSFER_SUB_TO = "tt"
 
 
 class AdminCB(CallbackData, prefix="a"):

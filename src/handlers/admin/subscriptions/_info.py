@@ -4,7 +4,7 @@ from eiogram.types import CallbackQuery
 from src.keys.admin import AdminCB, AdminKB, SectionType, ActionType
 from src.db import Session, Subscription
 from src.language import MesText
-from src.utils import ResourceNotFoundError
+from src.utils.exceptions import ResourceNotFoundError
 
 
 router = Router()

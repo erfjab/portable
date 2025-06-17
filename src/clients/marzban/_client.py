@@ -64,7 +64,7 @@ class MarzbanClient(ClientBase, RequestCore):
             endpoint="/api/users",
             params={
                 "offset": ((page - 1) * size),
-                "limit": page,
+                "limit": size,
             },
             access_token=access,
         )

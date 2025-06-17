@@ -33,4 +33,13 @@ class MesText(StrEnum):
         "<b>Remark:</b> <code>{remark}</code>\n"
         "<b>Key:</b> <code>{key}</code>\n"
         "<b>Link:</b> <code>{link}</code>\n"
+        "<b>Owner:</b> <code>{owner}</code>\n"
     )
+    SUBSCRIPTIONS_TRANSFER_SUB_FROM = "from server:"
+    SUBSCRIPTIONS_TRANSFER_SUB_TO = "to server:"
+    SUBSCRIPTIONS_TRANSFER_RESULT = (
+        "<b>total subs:</b> <code>{total}</code>\n"
+        "<b>success subs:</b> <code>{success}</code>\n"
+        "<b>failed subs:</b> <code>{failed}</code>"
+    )
+    WAIT = "⏳"
